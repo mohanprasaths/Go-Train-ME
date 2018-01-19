@@ -8,7 +8,9 @@ type Greetings struct {
 	informalGreet string
 }
 
-func Printme(myGreetings Greetings, do func(string)) {
+type Printer func(string)
+
+func Printme(myGreetings Greetings, do Printer) {
 	formal, informal := GreetingsConvertor(myGreetings)
 	fmt.Println(formal)
 	fmt.Println(informal)
@@ -38,8 +40,15 @@ func myPrintLine(mystring string) {
 	fmt.Println(mystring)
 }
 
+func myCustomPrint(custom string) Printer {
+	return func(myString string) {
+		fmt.Print(myString + custom)
+	}
+}
+
 func main() {
 	var myGreetings = Greetings{name: "mohan", greeting: "hello", informalGreet: "heeey"}
 	Printme(myGreetings, myPrint)
 	Printme(myGreetings, myPrintLine)
+	Printme(myGreetings, myCustomPrint("!!!!"))
 }
