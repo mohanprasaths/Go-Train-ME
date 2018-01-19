@@ -8,14 +8,14 @@ type Greetings struct {
 	informalGreet string
 }
 
-func Printme(myGreetings Greetings) {
+func Printme(myGreetings Greetings, do func(string)) {
 	formal, informal := GreetingsConvertor(myGreetings)
 	fmt.Println(formal)
 	fmt.Println(informal)
 	formal, informal, variaDic := variaDicGreetingsConvertor(myGreetings, "working", "  fine")
-	fmt.Println(formal)
-	fmt.Println(informal)
-	fmt.Println(variaDic)
+	do(formal)
+	do(informal)
+	do(variaDic)
 }
 
 func GreetingsConvertor(myGreetings Greetings) (formalWish, informalWish string) {
@@ -31,7 +31,15 @@ func variaDicGreetingsConvertor(myGreetings Greetings, variaDic ...string) (form
 	return
 }
 
+func myPrint(mystring string) {
+	fmt.Print(mystring)
+}
+func myPrintLine(mystring string) {
+	fmt.Println(mystring)
+}
+
 func main() {
 	var myGreetings = Greetings{name: "mohan", greeting: "hello", informalGreet: "heeey"}
-	Printme(myGreetings)
+	Printme(myGreetings, myPrint)
+	Printme(myGreetings, myPrintLine)
 }
