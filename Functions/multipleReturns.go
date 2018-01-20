@@ -10,6 +10,8 @@ type Greetings struct {
 
 type Printer func(string)
 
+var greetingMap map[string]string
+
 func Printme(myGreetings Greetings, do Printer) {
 	formal, informal := GreetingsConvertor(myGreetings)
 	fmt.Println(formal)
@@ -39,9 +41,14 @@ func GreetingsConvertor(myGreetings Greetings) (formalWish, informalWish string)
 }
 
 func variaDicGreetingsConvertor(myGreetings Greetings, variaDic ...string) (formalWish, informalWish, variaDicEg string) {
-	formalWish = myGreetings.greeting + "  " + getPrefix(myGreetings.name) + myGreetings.name
+	formalWish = myGreetings.greeting + "  " + getPrefixUsingMap(myGreetings.name) + myGreetings.name
 	informalWish = myGreetings.informalGreet + "  " + myGreetings.name
 	variaDicEg = variaDic[0] + variaDic[1]
+	return
+}
+
+func getPrefixUsingMap(name string) (prefix string) {
+	prefix = greetingMap[name]
 	return
 }
 
@@ -71,7 +78,19 @@ func myCustomPrint(custom string) Printer {
 	}
 }
 
+func initGreetingMap() {
+	greetingMap = make(map[string]string)
+	greetingMap["mohan"] = "Mr"
+	greetingMap["prasath"] = "Dr"
+	greetingMap["Superman"] = "hero"
+	greetingMap["Spiderman"] = "hero"
+	greetingMap["Ironman"] = "Boss"
+
+	delete(greetingMap, "Ironman")
+}
+
 func main() {
+	initGreetingMap()
 	var myGreetings = Greetings{name: "mohan", greeting: "hello", informalGreet: "heeey"}
 	Printme(myGreetings, myPrint)
 	Printme(myGreetings, myPrintLine)
