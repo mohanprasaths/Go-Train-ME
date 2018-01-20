@@ -27,7 +27,11 @@ func GreetingsConvertor(myGreetings Greetings) (formalWish, informalWish string)
 }
 
 func variaDicGreetingsConvertor(myGreetings Greetings, variaDic ...string) (formalWish, informalWish, variaDicEg string) {
-	formalWish = myGreetings.greeting + "  " + myGreetings.name
+	if prefix := "BOSS"; myGreetings.name == "mohan" {
+		formalWish = myGreetings.greeting + "  " + prefix + myGreetings.name
+	} else {
+		formalWish = myGreetings.greeting + "  " + myGreetings.name
+	}
 	informalWish = myGreetings.informalGreet + "  " + myGreetings.name
 	variaDicEg = variaDic[0] + variaDic[1]
 	return
