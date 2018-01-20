@@ -20,6 +20,18 @@ func Printme(myGreetings Greetings, do Printer) {
 	do(variaDic)
 }
 
+func PrintmeSlice(myGreetings []Greetings, do Printer) {
+	for _, s := range myGreetings {
+		formal, informal := GreetingsConvertor(s)
+		fmt.Println(formal)
+		fmt.Println(informal)
+		formal, informal, variaDic := variaDicGreetingsConvertor(s, "working", "  fine")
+		do(formal)
+		do(informal)
+		do(variaDic)
+	}
+}
+
 func GreetingsConvertor(myGreetings Greetings) (formalWish, informalWish string) {
 	formalWish = myGreetings.greeting + "  " + myGreetings.name
 	informalWish = myGreetings.informalGreet + "  " + myGreetings.name
@@ -68,4 +80,14 @@ func main() {
 	Printme(myGreetings2, myPrint)
 	Printme(myGreetings2, myPrintLine)
 	Printme(myGreetings2, myCustomPrint("!!!!"))
+
+	slice := []Greetings{
+		{name: "Spiderman", greeting: "Superhero", informalGreet: "Bugg"},
+		{name: "Superman", greeting: "Superhero", informalGreet: "Alien"},
+		{name: "Ironman", greeting: "Superhero", informalGreet: "Tin"},
+	}
+
+	PrintmeSlice(slice, myPrint)
+	PrintmeSlice(slice, myPrintLine)
+
 }
