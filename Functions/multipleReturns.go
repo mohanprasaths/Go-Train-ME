@@ -89,7 +89,25 @@ func initGreetingMap() {
 	delete(greetingMap, "Ironman")
 }
 
+func initSlice() {
+	slice := []int{1, 2, 3, 4, 5}
+	slice = appendSliceWithSlice(slice, 6)
+	slice = appendSlice(slice, 7)
+
+	fmt.Print(slice)
+}
+
+func appendSlice(slice []int, number int) (sliceNew []int) {
+	sliceNew = append(slice, number)
+	return
+}
+func appendSliceWithSlice(slice []int, number int) (sliceNew []int) {
+	sliceTemp := []int{number}
+	sliceNew = append(slice, sliceTemp...)
+	return
+}
 func main() {
+	initSlice()
 	initGreetingMap()
 	var myGreetings = Greetings{name: "mohan", greeting: "hello", informalGreet: "heeey"}
 	Printme(myGreetings, myPrint)
