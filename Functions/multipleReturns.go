@@ -8,6 +8,8 @@ type Greetings struct {
 	informalGreet string
 }
 
+type GreetingsCollection []Greetings
+
 type Printer func(string)
 
 var greetingMap map[string]string
@@ -106,6 +108,18 @@ func appendSliceWithSlice(slice []int, number int) (sliceNew []int) {
 	sliceNew = append(slice, sliceTemp...)
 	return
 }
+
+func (greetingsColl GreetingsCollection) GreetUS(do Printer) {
+	for _, s := range greetingsColl {
+		formal, informal := GreetingsConvertor(s)
+		fmt.Println(formal)
+		fmt.Println(informal)
+		formal, informal, variaDic := variaDicGreetingsConvertor(s, "Greetings", "  Collection using Method")
+		do(formal)
+		do(informal)
+		do(variaDic)
+	}
+}
 func main() {
 	initSlice()
 	initGreetingMap()
@@ -118,7 +132,7 @@ func main() {
 	Printme(myGreetings2, myPrintLine)
 	Printme(myGreetings2, myCustomPrint("!!!!"))
 
-	slice := []Greetings{
+	slice := GreetingsCollection{
 		{name: "Spiderman", greeting: "Superhero", informalGreet: "Bugg"},
 		{name: "Superman", greeting: "Superhero", informalGreet: "Alien"},
 		{name: "Ironman", greeting: "Superhero", informalGreet: "Tin"},
@@ -126,5 +140,5 @@ func main() {
 
 	PrintmeSlice(slice, myPrint)
 	PrintmeSlice(slice, myPrintLine)
-
+	slice.GreetUS(myPrint)
 }
