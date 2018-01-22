@@ -163,4 +163,25 @@ func main() {
 	for s := range c {
 		fmt.Println(s.name)
 	}
+
+	c1 := make(chan Greetings)
+	c2 := make(chan Greetings)
+	go slice.GreetingsCollectionFiller(c1)
+	go slice.GreetingsCollectionFiller(c2)
+
+	for {
+		select {
+		case s, ok := <-c1:
+			if ok {
+				fmt.Println(s.name, "from 1")
+			}
+		case s, ok := <-c2:
+			if ok {
+				fmt.Println(s.name, "from 2")
+			}
+		default:
+			fmt.Println("Waiting")
+		}
+	}
+
 }
