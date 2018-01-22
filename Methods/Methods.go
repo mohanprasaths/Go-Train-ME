@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Greetings struct {
 	name          string
@@ -27,8 +29,8 @@ func Printme(myGreetings Greetings, do Printer) {
 func PrintmeSlice(myGreetings []Greetings, do Printer) {
 	for _, s := range myGreetings {
 		formal, informal := GreetingsConvertor(s)
-		fmt.Println(formal)
-		fmt.Println(informal)
+		// fmt.Println(formal)
+		// fmt.Println(informal)
 		formal, informal, variaDic := variaDicGreetingsConvertor(s, "working", "  fine")
 		do(formal)
 		do(informal)
@@ -111,14 +113,15 @@ func appendSliceWithSlice(slice []int, number int) (sliceNew []int) {
 
 func (greetingsColl GreetingsCollection) GreetUS(do Printer) {
 	for _, s := range greetingsColl {
-		formal, informal := GreetingsConvertor(s)
-		fmt.Println(formal)
-		fmt.Println(informal)
 		formal, informal, variaDic := variaDicGreetingsConvertor(s, "Greetings", "  Collection using Method")
 		do(formal)
 		do(informal)
 		do(variaDic)
 	}
+}
+
+func myPrinter(printString string) {
+	fmt.Println(printString + " ->>>>>> Go routine")
 }
 
 func (greeting *Greetings) Rename(newName string) {
@@ -134,28 +137,16 @@ func RenameToIronman(r Renamable) {
 }
 
 func main() {
-	initSlice()
-	initGreetingMap()
-	var myGreetings = Greetings{name: "mohan", greeting: "hello", informalGreet: "heeey"}
-	//Interface and method implementation
-	myGreetings.Rename("mohan Prasath")
-	RenameToIronman(&myGreetings)
-	//End
-	Printme(myGreetings, myPrint)
-	Printme(myGreetings, myPrintLine)
-	Printme(myGreetings, myCustomPrint("!!!!"))
-	var myGreetings2 = Greetings{name: "prasath", greeting: "hello", informalGreet: "heeey"}
-	Printme(myGreetings2, myPrint)
-	Printme(myGreetings2, myPrintLine)
-	Printme(myGreetings2, myCustomPrint("!!!!"))
-
 	slice := GreetingsCollection{
 		{name: "Spiderman", greeting: "Superhero", informalGreet: "Bugg"},
-		{name: "Superman", greeting: "Superhero", informalGreet: "Alien"},
-		{name: "Ironman", greeting: "Superhero", informalGreet: "Tin"},
 	}
 
-	PrintmeSlice(slice, myPrint)
-	PrintmeSlice(slice, myPrintLine)
-	slice.GreetUS(myPrint)
+	// PrintmeSlice(slice, myPrintLine)
+	done := make(chan bool, 2)
+	go func() {
+		slice.GreetUS(myPrinter)
+		done <- true
+	}()
+	slice.GreetUS(myPrintLine)
+	<-done
 }
