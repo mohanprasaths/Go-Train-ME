@@ -136,9 +136,17 @@ func RenameToIronman(r Renamable) {
 	r.Rename("Ironman")
 }
 
+func (greetingsColl GreetingsCollection) GreetingsCollectionFiller(c chan Greetings) {
+	for _, s := range greetingsColl {
+		c <- s
+	}
+	close(c)
+}
+
 func main() {
 	slice := GreetingsCollection{
 		{name: "Spiderman", greeting: "Superhero", informalGreet: "Bugg"},
+		{name: "Ironman", greeting: "Superhero", informalGreet: "Tinman"},
 	}
 
 	// PrintmeSlice(slice, myPrintLine)
@@ -149,4 +157,10 @@ func main() {
 	}()
 	slice.GreetUS(myPrintLine)
 	<-done
+
+	c := make(chan Greetings)
+	go slice.GreetingsCollectionFiller(c)
+	for s := range c {
+		fmt.Println(s.name)
+	}
 }
