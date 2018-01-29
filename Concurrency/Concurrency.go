@@ -2,17 +2,23 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
 func main() {
-	fmt.Print("started")
+	var WaitGrp sync.WaitGroup
+	WaitGrp.Add(2)
+	fmt.Println("started")
 	go func() {
+		defer WaitGrp.Done()
 		time.Sleep(5 * time.Second)
-		fmt.Println("Sleep in 5")
+		fmt.Println("Sleep and run in 5")
 	}()
 
 	go func() {
-		fmt.Println("Line")
+		defer WaitGrp.Done()
+		fmt.Println("Priority run")
 	}()
+	WaitGrp.Wait()
 }
